@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mezza — Owner Dashboard</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#100a02;--sidebar:#16100a;--card:#1e1408;--card2:#241a0c;
+  --border:rgba(240,217,181,0.09);--border2:rgba(240,217,181,0.15);
+  --gold:#c9903f;--gold-dim:rgba(201,144,63,0.18);--gold-text:#f0d9b5;
+  --text:#e8d0a8;--dim:rgba(240,217,181,0.38);--faint:rgba(240,217,181,0.2);
+  --green:#4a8c65;--green-bg:rgba(74,140,101,0.15);
+  --blue:#3a5a8c;--blue-bg:rgba(58,90,140,0.15);
+  --red:#a05a3a;--red-bg:rgba(160,90,58,0.18);
+  --amber:#c47c10;--amber-bg:rgba(196,124,16,0.15);
+  --purple:#8c5a9c;--purple-bg:rgba(140,90,156,0.15);
+}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;min-height:100vh;display:flex}
+
+/* ── SIDEBAR ─────────────────────────────────────────── */
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:var(--sidebar);border-right:0.5px solid var(--border);display:flex;flex-direction:column;z-index:100}
+
+.sb-brand{padding:28px 22px 24px;border-bottom:0.5px solid var(--border)}
+.sb-logo{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--gold-text);letter-spacing:5px;line-height:1}
+.sb-sub{font-size:9px;letter-spacing:2.5px;color:var(--faint);margin-top:4px}
+.sb-status{display:flex;align-items:center;gap:7px;margin-top:14px;padding:8px 12px;background:rgba(74,140,101,0.12);border:0.5px solid rgba(74,140,101,0.25);border-radius:8px}
+.sb-dot{width:6px;height:6px;border-radius:50%;background:#4a8c65;animation:pulse 2s infinite;flex-shrink:0}
+.sb-status-text{font-size:10px;letter-spacing:1.5px;color:#4a8c65;font-weight:600}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+
+.sb-nav{flex:1;padding:20px 12px;display:flex;flex-direction:column;gap:4px}
+.sb-nav-label{font-size:9px;letter-spacing:2px;color:var(--faint);text-transform:uppercase;padding:0 10px;margin-bottom:6px;margin-top:8px}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:9px;cursor:pointer;transition:all .2s;color:var(--dim);font-size:12px;font-weight:500;letter-spacing:.3px;user-select:none;border:0.5px solid transparent}
+.nav-item i{font-size:16px;flex-shrink:0;width:18px}
+.nav-item:hover{color:var(--gold-text);background:rgba(240,217,181,0.05)}
+.nav-item.active{color:var(--gold);background:var(--gold-dim);border-color:rgba(201,144,63,0.25)}
+
+.sb-footer{padding:16px 22px;border-top:0.5px solid var(--border)}
+.sb-clock{font-family:'Playfair Display',serif;font-size:24px;font-weight:500;color:var(--gold-text);line-height:1}
+.sb-date{font-size:9px;letter-spacing:1.5px;color:var(--faint);margin-top:4px;text-transform:uppercase}
+.sb-live-rev{margin-top:12px;padding:10px 12px;background:var(--gold-dim);border-radius:8px;border:0.5px solid rgba(201,144,63,0.2)}
+.sb-rev-label{font-size:9px;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase}
+.sb-rev-val{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--gold-text);margin-top:3px}
+.sb-rev-sub{font-size:10px;color:var(--dim);margin-top:2px}
+
+/* ── MAIN AREA ───────────────────────────────────────── */
+.main{margin-left:240px;flex:1;min-height:100vh}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.content{padding:28px 30px;display:flex;flex-direction:column;gap:18px}
+
+/* ── SECTION HEADER ──────────────────────────────────── */
+.sec-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px}
+.sec-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:600;color:var(--gold-text);line-height:1}
+.sec-sub{font-size:11px;color:var(--dim);margin-top:5px;letter-spacing:.3px}
+.export-btn{display:flex;align-items:center;gap:7px;font-size:10px;letter-spacing:1.5px;font-weight:600;color:var(--bg);background:var(--gold);padding:8px 16px;border-radius:8px;cursor:pointer;border:none;transition:opacity .2s;font-family:'Inter',sans-serif;text-transform:uppercase}
+.export-btn:hover{opacity:.85}
+
+/* ── HERO STAT ROW ───────────────────────────────────── */
+.hero-row{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border2);border-radius:12px;overflow:hidden;border:0.5px solid var(--border2)}
+.hero-stat{background:var(--card);padding:20px 18px;display:flex;flex-direction:column;gap:6px}
+.hs-label{font-size:9px;letter-spacing:1.5px;color:var(--faint);text-transform:uppercase}
+.hs-val{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--gold-text);line-height:1}
+.hs-sub{font-size:10px;color:var(--dim)}
+.hs-sub .up{color:var(--green);font-weight:600}
+.hs-sub .dn{color:var(--red);font-weight:600}
+.hs-sub .neutral{color:var(--gold-text);font-weight:500}
+.hs-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:2px}
+
+/* ── DARK CARDS ──────────────────────────────────────── */
+.card{background:var(--card);border:0.5px solid var(--border);border-radius:12px;padding:20px}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-title{font-size:10px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;font-weight:600}
+.btn{font-size:9px;letter-spacing:1px;font-weight:600;padding:6px 12px;border-radius:7px;cursor:pointer;text-transform:uppercase;border:none;transition:all .15s;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:5px}
+.btn i{font-size:12px}
+.btn-gold{background:var(--gold-dim);color:var(--gold);border:0.5px solid rgba(201,144,63,0.3)}
+.btn-gold:hover{background:rgba(201,144,63,0.25)}
+.btn-green{background:var(--green-bg);color:#4a8c65;border:0.5px solid rgba(74,140,101,0.3)}
+.btn-green:hover{background:rgba(74,140,101,0.25)}
+.btn-red{background:var(--red-bg);color:var(--red);border:0.5px solid rgba(160,90,58,0.3)}
+.btn-solid{background:var(--gold);color:var(--bg);border:none}
+.btn-solid:hover{opacity:.85}
+
+/* ── GRID LAYOUTS ────────────────────────────────────── */
+.row2{display:grid;grid-template-columns:1.5fr 1fr;gap:16px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.row-eq{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.row-wide{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+
+/* ── CHART WRAPPERS ──────────────────────────────────── */
+.chart-wrap{position:relative;width:100%;height:180px}
+.chart-md{position:relative;width:100%;height:145px}
+.chart-sm{position:relative;width:100%;height:115px}
+.chart-lg{position:relative;width:100%;height:230px}
+
+/* ── LEGEND ──────────────────────────────────────────── */
+.legend{display:flex;gap:14px;margin-bottom:10px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--dim)}
+.legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.legend-line{width:14px;height:2px;flex-shrink:0;border-radius:2px}
+
+/* ── FLOOR PLAN ──────────────────────────────────────── */
+.floor{display:flex;gap:20px}
+.floor-section{flex:1}
+.floor-label{font-size:9px;letter-spacing:2px;color:var(--faint);text-transform:uppercase;margin-bottom:10px;text-align:center}
+.table-grid{display:grid;gap:6px}
+.tbl{height:38px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;letter-spacing:.5px;cursor:default;border:0.5px solid transparent;transition:all .2s;flex-direction:column;gap:2px}
+.tbl-num{font-size:8px;font-weight:700;opacity:.7}
+.tbl-covers{font-size:9px}
+.tbl-occupied{background:rgba(160,90,58,0.35);color:var(--red);border-color:rgba(160,90,58,0.4)}
+.tbl-turning{background:rgba(201,144,63,0.25);color:var(--gold);border-color:rgba(201,144,63,0.4);animation:flick 2s infinite}
+@keyframes flick{0%,100%{opacity:1}50%{opacity:.7}}
+.tbl-free{background:rgba(74,140,101,0.18);color:#4a8c65;border-color:rgba(74,140,101,0.3)}
+.tbl-reserved{background:rgba(58,90,140,0.2);color:#3a5a8c;border-color:rgba(58,90,140,0.3)}
+.floor-legend{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap}
+.fl-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--dim)}
+.fl-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+
+/* ── RESERVATION ROWS ────────────────────────────────── */
+.res-list{display:flex;flex-direction:column;gap:0}
+.res-item{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.5px solid rgba(240,217,181,0.05)}
+.res-item:last-child{border-bottom:none}
+.res-time-block{width:48px;flex-shrink:0;text-align:center}
+.res-hour{font-family:'Playfair Display',serif;font-size:15px;color:var(--gold-text);line-height:1}
+.res-min{font-size:9px;color:var(--faint)}
+.res-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff;flex-shrink:0;font-family:'Playfair Display',serif}
+.res-info{flex:1}
+.res-name{font-size:13px;color:var(--gold-text);font-weight:500}
+.res-detail{font-size:10px;color:var(--dim);margin-top:2px}
+.res-covers{font-size:11px;color:var(--dim);display:flex;align-items:center;gap:4px;flex-shrink:0}
+.tag{font-size:8px;font-weight:700;padding:3px 9px;border-radius:10px;letter-spacing:.5px;display:inline-block;white-space:nowrap}
+.tag-vip{background:var(--gold-dim);color:var(--gold);border:0.5px solid rgba(201,144,63,0.3)}
+.tag-seated{background:var(--green-bg);color:#4a8c65;border:0.5px solid rgba(74,140,101,0.3)}
+.tag-wait{background:var(--red-bg);color:var(--red);border:0.5px solid rgba(160,90,58,0.3)}
+.tag-up{background:var(--blue-bg);color:#3a5a8c;border:0.5px solid rgba(58,90,140,0.3)}
+.tag-done{background:rgba(240,217,181,0.08);color:var(--faint);border:0.5px solid rgba(240,217,181,0.1)}
+
+/* ── DISH ROWS ───────────────────────────────────────── */
+.dish-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid rgba(240,217,181,0.05)}
+.dish-item:last-child{border-bottom:none}
+.dish-rank{font-family:'Playfair Display',serif;font-size:22px;color:rgba(240,217,181,0.08);width:22px;flex-shrink:0}
+.dish-info{flex:1}
+.dish-name{font-size:12px;color:var(--gold-text);font-weight:500}
+.dish-bar-bg{height:3px;background:rgba(240,217,181,0.06);border-radius:2px;overflow:hidden;margin-top:5px}
+.dish-bar{height:100%;border-radius:2px}
+.dish-orders{font-size:11px;color:var(--dim);width:46px;text-align:right;flex-shrink:0}
+.dish-revenue{font-family:'Playfair Display',serif;font-size:13px;color:var(--gold-text);width:54px;text-align:right;flex-shrink:0}
+
+/* ── KITCHEN BARS ────────────────────────────────────── */
+.kw-item{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.kw-item:last-child{margin-bottom:0}
+.kw-name{font-size:11px;color:var(--gold-text);font-weight:500;width:100px;flex-shrink:0}
+.kw-track{flex:1;height:6px;background:rgba(240,217,181,0.07);border-radius:3px;overflow:hidden}
+.kw-fill{height:100%;border-radius:3px}
+.kw-min{font-family:'Playfair Display',serif;font-size:14px;font-weight:600;width:44px;text-align:right;flex-shrink:0}
+.kw-badge{font-size:8px;font-weight:700;width:34px;text-align:right;flex-shrink:0}
+
+/* ── DATA TABLE ──────────────────────────────────────── */
+.dtable{width:100%;border-collapse:collapse}
+.dtable th{font-size:9px;letter-spacing:1.5px;font-weight:600;text-transform:uppercase;color:var(--faint);padding:0 10px 12px;text-align:left;border-bottom:0.5px solid var(--border)}
+.dtable td{padding:11px 10px;border-bottom:0.5px solid rgba(240,217,181,0.04);vertical-align:middle;font-size:12px;color:var(--text)}
+.dtable tr:last-child td{border-bottom:none}
+.dtable tr:hover td{background:rgba(240,217,181,0.03)}
+.dtable td strong{color:var(--gold-text)}
+
+/* ── STAT PAIR ───────────────────────────────────────── */
+.stat-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat-cell{background:var(--card2);border-radius:9px;padding:14px;border:0.5px solid var(--border)}
+.stat-lbl{font-size:9px;letter-spacing:1.5px;color:var(--faint);text-transform:uppercase;margin-bottom:5px}
+.stat-val{font-family:'Playfair Display',serif;font-size:24px;font-weight:600;color:var(--gold-text);line-height:1}
+.stat-sub{font-size:10px;color:var(--dim);margin-top:4px}
+
+/* ── BADGE ───────────────────────────────────────────── */
+.badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;padding:3px 8px;border-radius:5px;font-weight:600}
+.badge-up{background:var(--green-bg);color:#4a8c65}
+.badge-dn{background:var(--red-bg);color:var(--red)}
+.badge-neu{background:rgba(240,217,181,0.08);color:var(--dim)}
+
+/* ── HEATMAP ─────────────────────────────────────────── */
+.hm-days{display:grid;grid-template-columns:40px repeat(7,1fr);gap:3px;margin-bottom:4px}
+.hm-day{font-size:9px;color:var(--faint);text-align:center}
+.hm-row-wrap{display:grid;grid-template-columns:40px repeat(7,1fr);gap:3px;margin-bottom:3px;align-items:center}
+.hm-lbl{font-size:9px;color:var(--faint);text-align:right;padding-right:5px}
+.hm-cell{height:16px;border-radius:3px}
+
+/* ── DIVIDER ─────────────────────────────────────────── */
+.divider{height:0.5px;background:var(--border);margin:14px 0}
+
+/* ── SCROLL ──────────────────────────────────────────── */
+.scroll-wrap{overflow-x:auto}
+
+/* ── TOAST ───────────────────────────────────────────── */
+#toastWrap{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{background:#1e1408;color:var(--gold-text);padding:13px 18px;border-radius:10px;font-size:12px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 28px rgba(0,0,0,.5);animation:toastIn .28s ease;border-left:3px solid var(--gold);max-width:310px;pointer-events:auto;border:0.5px solid rgba(201,144,63,0.25);border-left-width:3px}
+.toast i{color:var(--gold);font-size:16px;flex-shrink:0}
+@keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes toastOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(8px)}}
+</style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ─────────────────────────────────────────── -->
+<div class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">MEZZA</div>
+    <div class="sb-sub">Mediterranean Kitchen · Hamilton</div>
+    <div class="sb-status">
+      <div class="sb-dot"></div>
+      <div class="sb-status-text">Dinner Service Live</div>
+    </div>
+  </div>
+
+  <div class="sb-nav">
+    <div class="sb-nav-label">Sections</div>
+    <div class="nav-item active" data-tab="service" onclick="switchTab('service',this)"><i class="ti ti-bowl-spoon"></i>Tonight's Service</div>
+    <div class="nav-item" data-tab="floor" onclick="switchTab('floor',this)"><i class="ti ti-layout-grid"></i>Floor Plan</div>
+    <div class="nav-item" data-tab="reservations" onclick="switchTab('reservations',this)"><i class="ti ti-calendar-event"></i>Reservations</div>
+    <div class="nav-item" data-tab="menu" onclick="switchTab('menu',this)"><i class="ti ti-clipboard-list"></i>Menu &amp; Kitchen</div>
+    <div class="nav-item" data-tab="revenue" onclick="switchTab('revenue',this)"><i class="ti ti-chart-line"></i>Revenue</div>
+  </div>
+
+  <div class="sb-footer">
+    <div class="sb-clock" id="clockDisplay">—</div>
+    <div class="sb-date" id="dateDisplay">—</div>
+    <div class="sb-live-rev">
+      <div class="sb-rev-label">Tonight's Revenue</div>
+      <div class="sb-rev-val">$8,340</div>
+      <div class="sb-rev-sub">↑ 22% vs last Saturday</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN ─────────────────────────────────────────────── -->
+<div class="main">
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- TONIGHT'S SERVICE                                       -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div id="tab-service" class="tab-panel active">
+<div class="content">
+
+  <div class="sec-header">
+    <div>
+      <div class="sec-title">Tonight's Service</div>
+      <div class="sec-sub">Saturday dinner — live overview as of right now</div>
+    </div>
+    <button class="export-btn" onclick="exportReport()"><i class="ti ti-download"></i>Export Report</button>
+  </div>
+
+  <!-- Hero Stats -->
+  <div class="hero-row">
+    <div class="hero-stat">
+      <div class="hs-icon" style="background:var(--gold-dim)"><i class="ti ti-currency-dollar" style="color:var(--gold)"></i></div>
+      <div class="hs-label">Revenue Tonight</div>
+      <div class="hs-val">$8,340</div>
+      <div class="hs-sub"><span class="up">↑ 22%</span> vs last Saturday</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hs-icon" style="background:var(--green-bg)"><i class="ti ti-users" style="color:var(--green)"></i></div>
+      <div class="hs-label">Covers Served</div>
+      <div class="hs-val">112</div>
+      <div class="hs-sub">of <span class="neutral">140</span> capacity</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hs-icon" style="background:var(--blue-bg)"><i class="ti ti-layout-grid" style="color:var(--blue)"></i></div>
+      <div class="hs-label">Tables Active</div>
+      <div class="hs-val">18</div>
+      <div class="hs-sub"><span style="color:var(--gold)">4</span> turning soon</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hs-icon" style="background:var(--purple-bg)"><i class="ti ti-receipt" style="color:var(--purple)"></i></div>
+      <div class="hs-label">Avg Table Spend</div>
+      <div class="hs-val">$74</div>
+      <div class="hs-sub"><span class="up">↑ $8</span> above target</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hs-icon" style="background:var(--red-bg)"><i class="ti ti-clock" style="color:var(--red)"></i></div>
+      <div class="hs-label">Avg Wait Time</div>
+      <div class="hs-val">18 min</div>
+      <div class="hs-sub"><span class="dn">↑ 4 min</span> above avg</div>
+    </div>
+  </div>
+
+  <!-- Covers Chart + Reservations -->
+  <div class="row2">
+    <div class="card">
+      <div class="card-hdr">
+        <div class="card-title">Covers Per Hour — Tonight</div>
+        <button class="btn btn-gold" onclick="dlCSV('covers-tonight.csv',[['Hour','Covers'],['5pm',18],['6pm',42],['7pm',78],['8pm',112],['9pm',98],['10pm',64],['11pm',28]])"><i class="ti ti-download"></i>CSV</button>
+      </div>
+      <div class="chart-wrap"><canvas id="coversChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-hdr">
+        <div class="card-title">Next Reservations</div>
+        <button class="btn btn-gold" onclick="switchTab('reservations',document.querySelector('[data-tab=reservations]'))"><i class="ti ti-arrow-right"></i>All</button>
+      </div>
+      <div class="res-list">
+        <div class="res-item"><div class="res-time-block"><div class="res-hour">7:00</div></div><div class="res-av" style="background:#8b6f3e">AL</div><div class="res-info"><div class="res-name">Adler, L.</div><div class="res-detail">Main · Champagne</div></div><div class="res-covers"><i class="ti ti-users" style="font-size:10px"></i>4</div><span class="tag tag-vip">VIP</span></div>
+        <div class="res-item"><div class="res-time-block"><div class="res-hour">7:15</div></div><div class="res-av" style="background:#3e5e8b">MR</div><div class="res-info"><div class="res-name">Moreau, R.</div><div class="res-detail">Terrace · Anniversary</div></div><div class="res-covers"><i class="ti ti-users" style="font-size:10px"></i>2</div><span class="tag tag-seated">Seated</span></div>
+        <div class="res-item"><div class="res-time-block"><div class="res-hour">7:30</div></div><div class="res-av" style="background:#3e7a5e">KP</div><div class="res-info"><div class="res-name">Khan, P.</div><div class="res-detail">Private Room A · Party of 8</div></div><div class="res-covers"><i class="ti ti-users" style="font-size:10px"></i>8</div><span class="tag tag-seated">Seated</span></div>
+        <div class="res-item"><div class="res-time-block"><div class="res-hour">8:00</div></div><div class="res-av" style="background:#6b3e8b">SV</div><div class="res-info"><div class="res-name">Silva, V.</div><div class="res-detail">Main dining</div></div><div class="res-covers"><i class="ti ti-users" style="font-size:10px"></i>3</div><span class="tag tag-up">Upcoming</span></div>
+        <div class="res-item"><div class="res-time-block"><div class="res-hour">8:30</div></div><div class="res-av" style="background:#8b3e3e">TC</div><div class="res-info"><div class="res-name">Tanaka, C.</div><div class="res-detail">Terrace · Walk-in</div></div><div class="res-covers"><i class="ti ti-users" style="font-size:10px"></i>5</div><span class="tag tag-wait">Waiting</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Dishes + Kitchen + Section Rev -->
+  <div class="row3">
+    <div class="card">
+      <div class="card-hdr">
+        <div class="card-title">Top Dishes Tonight</div>
+        <button class="btn btn-gold" onclick="dlCSV('dishes.csv',[['Dish','Orders','Revenue'],['Lamb Kofta',42,1470],['Sea Bass',34,1530],['Mezze Board',27,1026],['Harissa Chicken',21,735],['Hummus & Pita',38,418],['Baklava Fondant',14,322]])"><i class="ti ti-download"></i>CSV</button>
+      </div>
+      <div class="dish-item"><div class="dish-rank">1</div><div class="dish-info"><div class="dish-name">Lamb Kofta Platter</div><div class="dish-bar-bg"><div class="dish-bar" style="width:100%;background:#c9903f"></div></div></div><div class="dish-orders">42</div><div class="dish-revenue">$1,470</div></div>
+      <div class="dish-item"><div class="dish-rank">2</div><div class="dish-info"><div class="dish-name">Saffron Sea Bass</div><div class="dish-bar-bg"><div class="dish-bar" style="width:81%;background:#3a5a8c"></div></div></div><div class="dish-orders">34</div><div class="dish-revenue">$1,530</div></div>
+      <div class="dish-item"><div class="dish-rank">3</div><div class="dish-info"><div class="dish-name">Truffle Mezze Board</div><div class="dish-bar-bg"><div class="dish-bar" style="width:64%;background:#4a8c65"></div></div></div><div class="dish-orders">27</div><div class="dish-revenue">$1,026</div></div>
+      <div class="dish-item"><div class="dish-rank">4</div><div class="dish-info"><div class="dish-name">Hummus &amp; Pita</div><div class="dish-bar-bg"><div class="dish-bar" style="width:90%;background:#a05a3a"></div></div></div><div class="dish-orders">38</div><div class="dish-revenue">$418</div></div>
+      <div class="dish-item"><div class="dish-rank">5</div><div class="dish-info"><div class="dish-name">Harissa Chicken</div><div class="dish-bar-bg"><div class="dish-bar" style="width:50%;background:#8c5a9c"></div></div></div><div class="dish-orders">21</div><div class="dish-revenue">$735</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">Kitchen Wait Times</div></div>
+      <div class="kw-item"><div class="kw-name">Appetisers</div><div class="kw-track"><div class="kw-fill" style="width:29%;background:#4a8c65"></div></div><div class="kw-min" style="color:#4a8c65">7 min</div><div class="kw-badge" style="color:#4a8c65">OK</div></div>
+      <div class="kw-item"><div class="kw-name">Mains</div><div class="kw-track"><div class="kw-fill" style="width:75%;background:#c9903f"></div></div><div class="kw-min" style="color:#c9903f">18 min</div><div class="kw-badge" style="color:#c9903f">Busy</div></div>
+      <div class="kw-item"><div class="kw-name">Grill Station</div><div class="kw-track"><div class="kw-fill" style="width:100%;background:#a05a3a"></div></div><div class="kw-min" style="color:#a05a3a">24 min</div><div class="kw-badge" style="color:#a05a3a">High</div></div>
+      <div class="kw-item"><div class="kw-name">Desserts</div><div class="kw-track"><div class="kw-fill" style="width:21%;background:#4a8c65"></div></div><div class="kw-min" style="color:#4a8c65">5 min</div><div class="kw-badge" style="color:#4a8c65">OK</div></div>
+      <div class="kw-item"><div class="kw-name">Bar</div><div class="kw-track"><div class="kw-fill" style="width:38%;background:#3a5a8c"></div></div><div class="kw-min" style="color:#3a5a8c">9 min</div><div class="kw-badge" style="color:#3a5a8c">OK</div></div>
+      <div class="divider"></div>
+      <div class="card-title" style="margin-bottom:12px">Table Turnover Rate</div>
+      <div class="chart-sm"><canvas id="turnoverChart"></canvas></div>
+    </div>
+
+    <div class="card">
+      <div class="card-hdr">
+        <div class="card-title">Revenue by Section</div>
+        <button class="btn btn-gold" onclick="dlCSV('sections.csv',[['Section','Revenue','Tables','Covers'],['Main Dining',4820,12,62],['Terrace',2140,6,34],['Private Room',1380,2,16],['Bar',680,8,12]])"><i class="ti ti-download"></i>CSV</button>
+      </div>
+      <div style="display:flex;justify-content:center;margin-bottom:14px"><div style="width:140px;height:140px"><canvas id="sectionChart"></canvas></div></div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:2px;background:#c9903f;flex-shrink:0"></div><div style="flex:1;font-size:11px">Main Dining</div><div style="font-family:'Playfair Display',serif;font-size:13px;color:var(--gold-text)">$4,820</div><div style="font-size:10px;color:var(--dim);width:32px;text-align:right">62 cvr</div></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:2px;background:#3a5a8c;flex-shrink:0"></div><div style="flex:1;font-size:11px">Terrace</div><div style="font-family:'Playfair Display',serif;font-size:13px;color:var(--gold-text)">$2,140</div><div style="font-size:10px;color:var(--dim);width:32px;text-align:right">34 cvr</div></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:2px;background:#4a8c65;flex-shrink:0"></div><div style="flex:1;font-size:11px">Private Room</div><div style="font-family:'Playfair Display',serif;font-size:13px;color:var(--gold-text)">$1,380</div><div style="font-size:10px;color:var(--dim);width:32px;text-align:right">16 cvr</div></div>
+        <div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:2px;background:#8c5a9c;flex-shrink:0"></div><div style="flex:1;font-size:11px">Bar Seating</div><div style="font-family:'Playfair Display',serif;font-size:13px;color:var(--gold-text)">$680</div><div style="font-size:10px;color:var(--dim);width:32px;text-align:right">12 cvr</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- FLOOR PLAN                                              -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div id="tab-floor" class="tab-panel">
+<div class="content">
+  <div class="sec-header">
+    <div><div class="sec-title">Floor Plan</div><div class="sec-sub">Live table status — updated in real time</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-hdr"><div class="card-title">Live Table Status</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-green" onclick="toast('Floor plan refreshed','ti-refresh')"><i class="ti ti-refresh"></i>Refresh</button>
+        <button class="btn btn-gold" onclick="dlCSV('floor-status.csv',[['Table','Section','Covers','Status'],['T1','Main',4,'Occupied'],['T2','Main',2,'Occupied'],['T3','Main',6,'Turning Soon'],['T4','Main',2,'Occupied'],['T5','Main',4,'Turning Soon'],['T6','Main',3,'Occupied'],['T7','Main',2,'Reserved'],['T8','Main',5,'Occupied'],['T9','Main',2,'Occupied'],['T10','Main',4,'Occupied'],['T11','Main',3,'Free'],['T12','Main',4,'Occupied'],['T1','Terrace',4,'Occupied'],['T2','Terrace',2,'Turning Soon'],['T3','Terrace',6,'Occupied'],['T4','Terrace',2,'Free'],['T5','Terrace',3,'Occupied'],['T6','Terrace',4,'Reserved'],['PR-A','Private',8,'Occupied'],['PR-B','Private',10,'Reserved']])"><i class="ti ti-download"></i>Export</button>
+      </div>
+    </div>
+
+    <div class="floor">
+      <!-- Main Dining -->
+      <div class="floor-section" style="flex:1.8">
+        <div class="floor-label">Main Dining (12 Tables)</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
+          <div class="tbl tbl-occupied"><div class="tbl-num">T1</div><div class="tbl-covers">4 cvr</div></div>
+          <div class="tbl tbl-occupied"><div class="tbl-num">T2</div><div class="tbl-covers">2 cvr</div></div>
+          <div class="tbl tbl-turning"><div class="tbl-num">T3</div><div class="tbl-covers">6 cvr</div></div>
+          <div class="tbl tbl-occupied"><div class="tbl-num">T4</div><div class="tbl-covers">2 cvr</div></div>
+          <div class="tbl tbl-turning"><div class="tbl-num">T5</div><div class="tbl-covers">4 cvr</div></div>
+          <div class="tbl tbl-occupied"><div class="tbl-num">T6</div><div class="tbl-covers">3 cvr</div></div>
+          <div class="tbl tbl-reserved"><div class="tbl-num">T7</div><div class="tbl-covers">8:00</div></div>
+          <div class="tbl tbl-occupied"><div class="tbl-num">T8</div><div class="tbl-covers">5 cvr</div></div>
+          <div class="tbl tbl-occupied"><div class="tbl-num">T9</div><div class="tbl-covers">2 cvr</div></div>
+          <div class="tbl tbl-occupied"><div class="tbl-num">T10</div><div class="tbl-covers">4 cvr</div></div>
+          <div class="tbl tbl-free"><div class="tbl-num">T11</div><div class="tbl-covers">Free</div></div>
+          <div class="tbl tbl-occupied"><div class="tbl-num">T12</div><div class="tbl-covers">4 cvr</div></div>
+        </div>
+      </div>
+      <div style="width:1px;background:var(--border);margin:0 16px;flex-shrink:0"></div>
+      <!-- Terrace -->
+      <div class="floor-section" style="flex:1">
+        <div class="floor-label">Terrace (6 Tables)</div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px">
+          <div class="tbl tbl-occupied"><div class="tbl-num">T1</div><div class="tbl-covers">4 cvr</div></div>
+          <div class="tbl tbl-turning"><div class="tbl-num">T2</div><div class="tbl-covers">2 cvr</div></div>
+          <div class="tbl tbl-occupied"><div class="tbl-num">T3</div><div class="tbl-covers">6 cvr</div></div>
+          <div class="tbl tbl-free"><div class="tbl-num">T4</div><div class="tbl-covers">Free</div></div>
+          <div class="tbl tbl-occupied"><div class="tbl-num">T5</div><div class="tbl-covers">5 cvr</div></div>
+          <div class="tbl tbl-reserved"><div class="tbl-num">T6</div><div class="tbl-covers">8:30</div></div>
+        </div>
+      </div>
+      <div style="width:1px;background:var(--border);margin:0 16px;flex-shrink:0"></div>
+      <!-- Private -->
+      <div class="floor-section" style="flex:.7">
+        <div class="floor-label">Private Rooms</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div class="tbl tbl-occupied" style="height:52px"><div class="tbl-num">Room A</div><div class="tbl-covers">8 cvr · Khan</div></div>
+          <div class="tbl tbl-reserved" style="height:52px"><div class="tbl-num">Room B</div><div class="tbl-covers">9:30 · Mueller</div></div>
+        </div>
+        <div style="margin-top:6px">
+          <div class="tbl tbl-free" style="height:38px;grid-column:span 2"><div class="tbl-num">Bar</div><div class="tbl-covers">6 / 8 occupied</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="floor-legend" style="margin-top:16px">
+      <div class="fl-item"><div class="fl-dot" style="background:rgba(160,90,58,0.35);border:0.5px solid rgba(160,90,58,0.4)"></div>Occupied</div>
+      <div class="fl-item"><div class="fl-dot" style="background:rgba(201,144,63,0.25);border:0.5px solid rgba(201,144,63,0.4)"></div>Turning Soon</div>
+      <div class="fl-item"><div class="fl-dot" style="background:rgba(74,140,101,0.18);border:0.5px solid rgba(74,140,101,0.3)"></div>Available</div>
+      <div class="fl-item"><div class="fl-dot" style="background:rgba(58,90,140,0.2);border:0.5px solid rgba(58,90,140,0.3)"></div>Reserved</div>
+    </div>
+  </div>
+
+  <div class="row-eq">
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">Occupancy by Section — Tonight</div></div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:var(--gold-text);font-weight:500">Main Dining</span><span style="font-size:11px;color:var(--dim)">11 / 12 tables · 92%</span></div><div style="height:8px;background:rgba(240,217,181,0.07);border-radius:4px;overflow:hidden"><div style="width:92%;height:100%;background:#a05a3a;border-radius:4px"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:var(--gold-text);font-weight:500">Terrace</span><span style="font-size:11px;color:var(--dim)">4 / 6 tables · 67%</span></div><div style="height:8px;background:rgba(240,217,181,0.07);border-radius:4px;overflow:hidden"><div style="width:67%;height:100%;background:#c9903f;border-radius:4px"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:var(--gold-text);font-weight:500">Private Room A</span><span style="font-size:11px;color:var(--dim)">1 / 1 · 100%</span></div><div style="height:8px;background:rgba(240,217,181,0.07);border-radius:4px;overflow:hidden"><div style="width:100%;height:100%;background:#a05a3a;border-radius:4px"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:var(--gold-text);font-weight:500">Private Room B</span><span style="font-size:11px;color:var(--dim)">Reserved 9:30</span></div><div style="height:8px;background:rgba(240,217,181,0.07);border-radius:4px;overflow:hidden"><div style="width:0%;height:100%;background:#3a5a8c;border-radius:4px"></div></div></div>
+        <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:var(--gold-text);font-weight:500">Bar Seating</span><span style="font-size:11px;color:var(--dim)">6 / 8 · 75%</span></div><div style="height:8px;background:rgba(240,217,181,0.07);border-radius:4px;overflow:hidden"><div style="width:75%;height:100%;background:#3a5a8c;border-radius:4px"></div></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">Reservation Heatmap — This Week</div></div>
+      <div class="hm-days"><div></div><div class="hm-day">Mon</div><div class="hm-day">Tue</div><div class="hm-day">Wed</div><div class="hm-day">Thu</div><div class="hm-day">Fri</div><div class="hm-day">Sat</div><div class="hm-day">Sun</div></div>
+      <div id="heatmap"></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- RESERVATIONS                                            -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div id="tab-reservations" class="tab-panel">
+<div class="content">
+  <div class="sec-header">
+    <div><div class="sec-title">Reservations</div><div class="sec-sub">Tonight's full booking list — Saturday service</div></div>
+    <button class="btn btn-gold" onclick="dlCSV('reservations.csv',[['Time','Name','Section','Party','Notes','Status'],['6:30 PM','Bennett, H.','Main',2,'Birthday','Done'],['7:00 PM','Adler, L.','Main',4,'Champagne on arrival','VIP'],['7:15 PM','Moreau, R.','Terrace',2,'Anniversary','Seated'],['7:30 PM','Khan, P.','Private A',8,'','Seated'],['7:45 PM','Rodriguez, M.','Main',4,'Vegan','Seated'],['8:00 PM','Silva, V.','Main',3,'','Upcoming'],['8:00 PM','Chen, W.','Terrace',6,'Halal req.','Upcoming'],['8:30 PM','Tanaka, C.','Terrace',5,'Walk-in','Waiting'],['9:00 PM','Dupont, F.','Main',4,'Wine pairing','Upcoming'],['9:30 PM','Mueller, K.','Private B',10,'Corporate VIP','Upcoming']])"><i class="ti ti-download"></i>Export Full List</button>
+  </div>
+
+  <div class="hero-row" style="grid-template-columns:repeat(4,1fr)">
+    <div class="hero-stat"><div class="hs-label">Tonight Bookings</div><div class="hs-val">24</div><div class="hs-sub">18 confirmed · 6 pending</div></div>
+    <div class="hero-stat"><div class="hs-label">Walk-ins Tonight</div><div class="hs-val">8</div><div class="hs-sub">Avg party size: 3.2</div></div>
+    <div class="hero-stat"><div class="hs-label">No-show Rate</div><div class="hs-val" style="color:var(--red)">4.2%</div><div class="hs-sub"><span class="dn">↑ 1.1%</span> vs last week</div></div>
+    <div class="hero-stat"><div class="hs-label">Avg Party Size</div><div class="hs-val">3.8</div><div class="hs-sub">Tonight's average</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-hdr"><div class="card-title">Tonight's Reservation List</div><button class="btn btn-green" onclick="toast('List refreshed','ti-refresh')"><i class="ti ti-refresh"></i>Refresh</button></div>
+    <div class="scroll-wrap">
+    <table class="dtable">
+      <thead><tr><th>Time</th><th>Guest</th><th>Section</th><th>Party</th><th>Note</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td class="res-time">6:30 PM</td><td><strong>Bennett, H.</strong><div style="font-size:10px;color:var(--dim)">Birthday</div></td><td>Main</td><td>2</td><td style="font-size:10px;color:var(--dim)">Birthday</td><td><span class="tag tag-done">Done</span></td><td><button class="btn btn-gold" onclick="toast('Bennett cleared','ti-check')">Clear</button></td></tr>
+        <tr><td class="res-time">7:00 PM</td><td><strong>Adler, L.</strong><div style="font-size:10px;color:var(--dim)">Champagne on arrival</div></td><td>Main</td><td>4</td><td><span class="tag tag-vip">VIP</span></td><td><span class="tag tag-seated">Seated</span></td><td><button class="btn btn-green" onclick="toast('Adler managed','ti-check')">Manage</button></td></tr>
+        <tr><td class="res-time">7:15 PM</td><td><strong>Moreau, R.</strong><div style="font-size:10px;color:var(--dim)">Anniversary</div></td><td>Terrace</td><td>2</td><td style="font-size:10px;color:var(--dim)">Anniversary</td><td><span class="tag tag-seated">Seated</span></td><td><button class="btn btn-green" onclick="toast('Moreau managed','ti-check')">Manage</button></td></tr>
+        <tr><td class="res-time">7:30 PM</td><td><strong>Khan, P.</strong></td><td>Private A</td><td>8</td><td style="font-size:10px;color:var(--dim)">—</td><td><span class="tag tag-seated">Seated</span></td><td><button class="btn btn-green" onclick="toast('Khan managed','ti-check')">Manage</button></td></tr>
+        <tr><td class="res-time">8:00 PM</td><td><strong>Silva, V.</strong></td><td>Main</td><td>3</td><td style="font-size:10px;color:var(--dim)">—</td><td><span class="tag tag-up">Upcoming</span></td><td><button class="btn btn-gold" onclick="toast('Silva, V. seated at Table 7','ti-armchair')">Seat Now</button></td></tr>
+        <tr><td class="res-time">8:00 PM</td><td><strong>Chen, W.</strong><div style="font-size:10px;color:var(--dim)">Halal menu requested</div></td><td>Terrace</td><td>6</td><td><span class="tag" style="background:var(--amber-bg);color:var(--amber);border:0.5px solid rgba(196,124,16,0.3)">Halal</span></td><td><span class="tag tag-up">Upcoming</span></td><td><button class="btn btn-gold" onclick="toast('Chen, W. seated at Terrace T6','ti-armchair')">Seat Now</button></td></tr>
+        <tr><td class="res-time">8:30 PM</td><td><strong>Tanaka, C.</strong><div style="font-size:10px;color:var(--dim)">Walk-in</div></td><td>Terrace</td><td>5</td><td style="font-size:10px;color:var(--dim)">Walk-in</td><td><span class="tag tag-wait">Waiting</span></td><td><button class="btn btn-gold" onclick="toast('Tanaka party seated','ti-armchair')">Seat Now</button></td></tr>
+        <tr><td class="res-time">9:00 PM</td><td><strong>Dupont, F.</strong><div style="font-size:10px;color:var(--dim)">Wine pairing menu</div></td><td>Main</td><td>4</td><td><span class="tag tag-vip">Sommelier</span></td><td><span class="tag tag-up">Upcoming</span></td><td><button class="btn btn-gold" onclick="toast('Dupont confirmed','ti-check')">Confirm</button></td></tr>
+        <tr><td class="res-time">9:30 PM</td><td><strong>Mueller, K.</strong><div style="font-size:10px;color:var(--dim)">Corporate dinner</div></td><td>Private B</td><td>10</td><td><span class="tag tag-vip">VIP</span></td><td><span class="tag tag-up">Upcoming</span></td><td><button class="btn btn-gold" onclick="toast('Mueller confirmed','ti-check')">Confirm</button></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="row-eq">
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">Weekly Reservation Volume</div><button class="btn btn-gold" onclick="dlCSV('weekly-res.csv',[['Day','Reservations','Walk-ins','No-shows'],['Mon',14,3,1],['Tue',18,4,2],['Wed',16,5,1],['Thu',22,6,2],['Fri',28,8,3],['Sat',32,10,4],['Sun',20,5,2]])"><i class="ti ti-download"></i>CSV</button></div>
+      <div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#c9903f"></div>Reservations</div><div class="legend-item"><div class="legend-dot" style="background:rgba(240,217,181,0.2)"></div>Walk-ins</div></div>
+      <div class="chart-lg"><canvas id="weekResChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">Booking Stats</div></div>
+      <div class="stat-pair">
+        <div class="stat-cell"><div class="stat-lbl">Walk-in Rate</div><div class="stat-val">25%</div><div class="stat-sub">of tonight's covers</div></div>
+        <div class="stat-cell"><div class="stat-lbl">No-show Rate</div><div class="stat-val" style="color:#a05a3a">4.2%</div><div class="stat-sub">This week avg</div></div>
+        <div class="stat-cell"><div class="stat-lbl">VIP Guests</div><div class="stat-val">3</div><div class="stat-sub">Tonight's bookings</div></div>
+        <div class="stat-cell"><div class="stat-lbl">Dietary Req.</div><div class="stat-val">14</div><div class="stat-sub">Vegan 6 · Halal 5 · GF 3</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- MENU & KITCHEN                                          -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div id="tab-menu" class="tab-panel">
+<div class="content">
+  <div class="sec-header">
+    <div><div class="sec-title">Menu &amp; Kitchen</div><div class="sec-sub">Tonight's dish performance and kitchen station status</div></div>
+    <button class="btn btn-gold" onclick="dlCSV('menu-full.csv',[['Dish','Category','Orders','Price','Revenue','Margin'],['Lamb Kofta Platter','Mains',42,35,1470,'68%'],['Saffron Sea Bass','Mains',34,45,1530,'72%'],['Truffle Mezze Board','Starters',27,38,1026,'74%'],['Hummus & Pita','Starters',38,11,418,'82%'],['Harissa Chicken','Mains',21,35,735,'65%'],['Mezza Wine','Beverages',64,14,896,'85%'],['Baklava Fondant','Desserts',14,23,322,'78%'],['Saffron Rice','Sides',52,9,468,'88%']])"><i class="ti ti-download"></i>Export Menu</button>
+  </div>
+
+  <div class="hero-row" style="grid-template-columns:repeat(4,1fr)">
+    <div class="hero-stat"><div class="hs-label">Most Ordered</div><div class="hs-val" style="font-size:20px">Lamb Kofta</div><div class="hs-sub">42 orders tonight</div></div>
+    <div class="hero-stat"><div class="hs-label">Highest Revenue</div><div class="hs-val" style="font-size:20px">Sea Bass</div><div class="hs-sub">$1,530 tonight</div></div>
+    <div class="hero-stat"><div class="hs-label">Items Sold</div><div class="hs-val">247</div><div class="hs-sub">Across all categories</div></div>
+    <div class="hero-stat"><div class="hs-label">Best Margin</div><div class="hs-val" style="font-size:20px">Wine</div><div class="hs-sub">85% margin</div></div>
+  </div>
+
+  <div class="row-eq">
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">Dish Performance — Tonight</div></div>
+      <div class="scroll-wrap">
+      <table class="dtable">
+        <thead><tr><th>#</th><th>Dish</th><th>Cat.</th><th>Orders</th><th>Revenue</th><th>Margin</th></tr></thead>
+        <tbody>
+          <tr><td style="font-family:'Playfair Display',serif;font-size:18px;color:rgba(240,217,181,0.1)">1</td><td><strong>Lamb Kofta Platter</strong></td><td><span class="tag tag-up" style="font-size:8px">Mains</span></td><td>42</td><td style="color:#4a8c65;font-family:'Playfair Display',serif">$1,470</td><td><span class="badge badge-up">68%</span></td></tr>
+          <tr><td style="font-family:'Playfair Display',serif;font-size:18px;color:rgba(240,217,181,0.1)">2</td><td><strong>Saffron Sea Bass</strong></td><td><span class="tag tag-up" style="font-size:8px">Mains</span></td><td>34</td><td style="color:#4a8c65;font-family:'Playfair Display',serif">$1,530</td><td><span class="badge badge-up">72%</span></td></tr>
+          <tr><td style="font-family:'Playfair Display',serif;font-size:18px;color:rgba(240,217,181,0.1)">3</td><td><strong>Truffle Mezze Board</strong></td><td><span class="tag tag-seated" style="font-size:8px">Starters</span></td><td>27</td><td style="color:#4a8c65;font-family:'Playfair Display',serif">$1,026</td><td><span class="badge badge-up">74%</span></td></tr>
+          <tr><td style="font-family:'Playfair Display',serif;font-size:18px;color:rgba(240,217,181,0.1)">4</td><td><strong>Hummus &amp; Pita</strong></td><td><span class="tag tag-seated" style="font-size:8px">Starters</span></td><td>38</td><td style="color:#4a8c65;font-family:'Playfair Display',serif">$418</td><td><span class="badge badge-up">82%</span></td></tr>
+          <tr><td style="font-family:'Playfair Display',serif;font-size:18px;color:rgba(240,217,181,0.1)">5</td><td><strong>Mezza Wine (Glass)</strong></td><td><span class="tag tag-vip" style="font-size:8px">Bev.</span></td><td>64</td><td style="color:#4a8c65;font-family:'Playfair Display',serif">$896</td><td><span class="badge badge-up">85%</span></td></tr>
+          <tr><td style="font-family:'Playfair Display',serif;font-size:18px;color:rgba(240,217,181,0.1)">6</td><td><strong>Harissa Chicken</strong></td><td><span class="tag tag-up" style="font-size:8px">Mains</span></td><td>21</td><td style="color:#4a8c65;font-family:'Playfair Display',serif">$735</td><td><span class="badge badge-up">65%</span></td></tr>
+          <tr><td style="font-family:'Playfair Display',serif;font-size:18px;color:rgba(240,217,181,0.1)">7</td><td><strong>Baklava Fondant</strong></td><td><span class="tag tag-wait" style="font-size:8px">Desserts</span></td><td>14</td><td style="color:#4a8c65;font-family:'Playfair Display',serif">$322</td><td><span class="badge badge-up">78%</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">Kitchen Station Status</div></div>
+      <div class="kw-item"><div class="kw-name">Appetisers</div><div class="kw-track"><div class="kw-fill" style="width:29%;background:#4a8c65"></div></div><div class="kw-min" style="color:#4a8c65">7 min</div><div class="kw-badge" style="color:#4a8c65">OK</div></div>
+      <div class="kw-item"><div class="kw-name">Mains</div><div class="kw-track"><div class="kw-fill" style="width:75%;background:#c9903f"></div></div><div class="kw-min" style="color:#c9903f">18 min</div><div class="kw-badge" style="color:#c9903f">Busy</div></div>
+      <div class="kw-item"><div class="kw-name">Grill Station</div><div class="kw-track"><div class="kw-fill" style="width:100%;background:#a05a3a"></div></div><div class="kw-min" style="color:#a05a3a">24 min</div><div class="kw-badge" style="color:#a05a3a">High</div></div>
+      <div class="kw-item"><div class="kw-name">Desserts</div><div class="kw-track"><div class="kw-fill" style="width:21%;background:#4a8c65"></div></div><div class="kw-min" style="color:#4a8c65">5 min</div><div class="kw-badge" style="color:#4a8c65">OK</div></div>
+      <div class="kw-item"><div class="kw-name">Bar</div><div class="kw-track"><div class="kw-fill" style="width:38%;background:#3a5a8c"></div></div><div class="kw-min" style="color:#3a5a8c">9 min</div><div class="kw-badge" style="color:#3a5a8c">OK</div></div>
+      <div class="divider"></div>
+      <div class="card-title" style="margin-bottom:10px">Orders by Category</div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#c9903f"></div>Mains</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#4a8c65"></div>Starters</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#3a5a8c"></div>Beverages</div>
+      </div>
+      <div style="width:160px;height:160px;margin:0 auto"><canvas id="catChart"></canvas></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- REVENUE                                                 -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div id="tab-revenue" class="tab-panel">
+<div class="content">
+  <div class="sec-header">
+    <div><div class="sec-title">Revenue</div><div class="sec-sub">8-week performance trend and nightly breakdown</div></div>
+    <button class="export-btn" onclick="dlCSV('revenue-full.csv',[['Week','Revenue','Covers','Avg Spend','Cost','Net Margin'],['Week 1',18200,484,37.60,12600,'30.8%'],['Week 2',21400,568,37.68,14400,'32.7%'],['Week 3',19800,520,38.08,13500,'31.8%'],['Week 4',24600,640,38.44,16200,'34.1%'],['Week 5',22100,580,38.10,14800,'33.0%'],['Week 6',26800,700,38.29,17400,'35.1%'],['Week 7',25400,660,38.48,16800,'33.9%'],['Week 8',31200,810,38.52,19800,'36.5%']])"><i class="ti ti-download"></i>Export All</button>
+  </div>
+
+  <div class="hero-row" style="grid-template-columns:repeat(4,1fr)">
+    <div class="hero-stat"><div class="hs-label">Tonight</div><div class="hs-val">$8,340</div><div class="hs-sub"><span class="up">↑ 22%</span> vs last Sat</div></div>
+    <div class="hero-stat"><div class="hs-label">8-Week Total</div><div class="hs-val">$189,500</div><div class="hs-sub">Avg $23,688/week</div></div>
+    <div class="hero-stat"><div class="hs-label">Best Week</div><div class="hs-val">$31,200</div><div class="hs-sub">Week 8 — record high</div></div>
+    <div class="hero-stat"><div class="hs-label">Avg Table Spend</div><div class="hs-val">$74</div><div class="hs-sub"><span class="up">↑ $8</span> above $66 target</div></div>
+  </div>
+
+  <div class="row-eq">
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">8-Week Revenue Trend</div><button class="btn btn-gold" onclick="dlCSV('trend.csv',[['Week','Revenue'],['Wk 1',18200],['Wk 2',21400],['Wk 3',19800],['Wk 4',24600],['Wk 5',22100],['Wk 6',26800],['Wk 7',25400],['Wk 8',31200]])"><i class="ti ti-download"></i>CSV</button></div>
+      <div class="chart-lg"><canvas id="trendChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">Covers per Week</div><button class="btn btn-gold" onclick="dlCSV('covers-weekly.csv',[['Week','Covers'],['Wk 1',484],['Wk 2',568],['Wk 3',520],['Wk 4',640],['Wk 5',580],['Wk 6',700],['Wk 7',660],['Wk 8',810]])"><i class="ti ti-download"></i>CSV</button></div>
+      <div class="chart-lg"><canvas id="coversWeekChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hdr"><div class="card-title">Weekly P&amp;L Summary</div><button class="btn btn-gold" onclick="dlCSV('pnl.csv',[['Week','Revenue','Operating Cost','Net Profit','Margin','vs Target'],['Week 1',18200,12600,5600,'30.8%','-$1,800'],['Week 2',21400,14400,7000,'32.7%','+$1,400'],['Week 3',19800,13500,6300,'31.8%','-$200'],['Week 4',24600,16200,8400,'34.1%','+$4,600'],['Week 5',22100,14800,7300,'33.0%','+$2,100'],['Week 6',26800,17400,9400,'35.1%','+$6,800'],['Week 7',25400,16800,8600,'33.9%','+$5,400'],['Week 8',31200,19800,11400,'36.5%','+$11,200']])"><i class="ti ti-download"></i>Export P&amp;L</button></div>
+    <div class="scroll-wrap">
+    <table class="dtable">
+      <thead><tr><th>Week</th><th>Revenue</th><th>Covers</th><th>Avg Spend</th><th>Oper. Cost</th><th>Net Profit</th><th>Margin</th><th>vs Target</th></tr></thead>
+      <tbody>
+        <tr><td>Week 1</td><td>$18,200</td><td>484</td><td>$37.60</td><td>$12,600</td><td style="color:#4a8c65">$5,600</td><td><span class="badge badge-up">30.8%</span></td><td><span class="badge badge-dn">-$1,800</span></td></tr>
+        <tr><td>Week 2</td><td>$21,400</td><td>568</td><td>$37.68</td><td>$14,400</td><td style="color:#4a8c65">$7,000</td><td><span class="badge badge-up">32.7%</span></td><td><span class="badge badge-up">+$1,400</span></td></tr>
+        <tr><td>Week 3</td><td>$19,800</td><td>520</td><td>$38.08</td><td>$13,500</td><td style="color:#4a8c65">$6,300</td><td><span class="badge badge-up">31.8%</span></td><td><span class="badge badge-dn">-$200</span></td></tr>
+        <tr><td>Week 4</td><td>$24,600</td><td>640</td><td>$38.44</td><td>$16,200</td><td style="color:#4a8c65">$8,400</td><td><span class="badge badge-up">34.1%</span></td><td><span class="badge badge-up">+$4,600</span></td></tr>
+        <tr><td>Week 5</td><td>$22,100</td><td>580</td><td>$38.10</td><td>$14,800</td><td style="color:#4a8c65">$7,300</td><td><span class="badge badge-up">33.0%</span></td><td><span class="badge badge-up">+$2,100</span></td></tr>
+        <tr><td>Week 6</td><td>$26,800</td><td>700</td><td>$38.29</td><td>$17,400</td><td style="color:#4a8c65">$9,400</td><td><span class="badge badge-up">35.1%</span></td><td><span class="badge badge-up">+$6,800</span></td></tr>
+        <tr><td>Week 7</td><td>$25,400</td><td>660</td><td>$38.48</td><td>$16,800</td><td style="color:#4a8c65">$8,600</td><td><span class="badge badge-up">33.9%</span></td><td><span class="badge badge-up">+$5,400</span></td></tr>
+        <tr><td><strong style="color:var(--gold-text)">Week 8</strong></td><td><strong style="color:var(--gold-text)">$31,200</strong></td><td><strong>810</strong></td><td>$38.52</td><td>$19,800</td><td style="color:#4a8c65;font-family:'Playfair Display',serif;font-size:15px">$11,400</td><td><span class="badge badge-up">36.5%</span></td><td><span class="badge badge-up">+$11,200</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+</div>
+
+</div><!-- /main -->
+
+<div id="toastWrap"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ── CLOCK ──────────────────────────────────────────────
+function updateClock(){
+  var n=new Date(),days=['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var h=n.getHours(),m=String(n.getMinutes()).padStart(2,'0');
+  document.getElementById('clockDisplay').textContent=(h%12||12)+':'+m+' '+(h>=12?'PM':'AM');
+  document.getElementById('dateDisplay').textContent=days[n.getDay()]+' · '+months[n.getMonth()]+' '+n.getDate()+', '+n.getFullYear();
+}
+setInterval(updateClock,1000); updateClock();
+
+// ── TABS ───────────────────────────────────────────────
+function switchTab(id,el){
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-item').forEach(function(t){t.classList.remove('active');});
+  document.getElementById('tab-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  else document.querySelector('[data-tab='+id+']').classList.add('active');
+  if(!chartsInit[id]) initCharts(id);
+}
+
+// ── TOAST ──────────────────────────────────────────────
+function toast(msg,icon){
+  icon=icon||'ti-circle-check';
+  var w=document.getElementById('toastWrap');
+  var t=document.createElement('div'); t.className='toast';
+  t.innerHTML='<i class="ti '+icon+'"></i><span>'+msg+'</span>';
+  w.appendChild(t);
+  setTimeout(function(){t.style.animation='toastOut .28s ease forwards';setTimeout(function(){t.remove();},300);},3200);
+}
+
+// ── CSV DOWNLOAD ───────────────────────────────────────
+function dlCSV(filename,rows){
+  var csv=rows.map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');}).join('\n');
+  var blob=new Blob([csv],{type:'text/csv'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a'); a.href=url; a.download=filename; a.click();
+  URL.revokeObjectURL(url);
+  toast('Downloaded: '+filename,'ti-download');
+}
+
+function exportReport(){
+  dlCSV('mezza-owner-report.csv',[
+    ['MEZZA — Owner Report'],[''],
+    ['KPI','Value'],
+    ['Tonight Revenue','$8,340'],
+    ['Covers Served',112],
+    ['Tables Active','18 / 22'],
+    ['Avg Table Spend','$74'],
+    ['Avg Wait Time','18 min'],
+    ['Reservations Remaining',6],
+    [''],
+    ['Section','Revenue','Covers'],
+    ['Main Dining','$4,820',62],
+    ['Terrace','$2,140',34],
+    ['Private Room','$1,380',16],
+    ['Bar','$680',12],
+  ]);
+}
+
+// ── CHARTS ─────────────────────────────────────────────
+var chartsInit={service:false,floor:false,reservations:false,menu:false,revenue:false};
+var warm='rgba(201,144,63,', green='rgba(74,140,101,', blue='rgba(58,90,140,', red='rgba(160,90,58,';
+var gridC='rgba(240,217,181,0.06)',tickC='rgba(240,217,181,0.35)';
+var tip={backgroundColor:'#1e1408',borderColor:'rgba(201,144,63,0.2)',borderWidth:1,titleColor:'rgba(240,217,181,0.4)',bodyColor:'#f0d9b5',padding:10,cornerRadius:8};
+var bx={x:{grid:{color:gridC},ticks:{color:tickC,font:{size:10}},border:{display:false}},y:{grid:{color:gridC},ticks:{color:tickC,font:{size:10}},border:{display:false}}};
+
+function initCharts(tab){
+  chartsInit[tab]=true;
+
+  if(tab==='service'){
+    new Chart(document.getElementById('coversChart'),{type:'bar',data:{labels:['5pm','6pm','7pm','8pm','9pm','10pm','11pm'],datasets:[{data:[18,42,78,112,98,64,28],backgroundColor:[warm+'0.12)',warm+'0.2)',warm+'0.35)',warm+'0.85)',warm+'0.62)',warm+'0.35)',warm+'0.12)'],borderRadius:5,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:tip},scales:bx}});
+
+    new Chart(document.getElementById('turnoverChart'),{type:'line',data:{labels:['5pm','6pm','7pm','8pm','9pm','10pm'],datasets:[{data:[1.2,1.8,2.4,2.1,1.9,1.4],borderColor:'#4a8c65',borderWidth:2,pointRadius:4,pointBackgroundColor:'#4a8c65',fill:true,backgroundColor:'rgba(74,140,101,0.08)',tension:.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:tip},scales:{x:{...bx.x},y:{...bx.y,ticks:{...bx.y.ticks,callback:function(v){return v+'x';}}}}}});
+
+    var sp={id:'sp',afterDraw:function(c){var ctx=c.ctx,ca=c.chartArea,cx=(ca.left+ca.right)/2,cy=(ca.top+ca.bottom)/2;ctx.save();ctx.font='600 13px "Playfair Display",serif';ctx.fillStyle='#f0d9b5';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('$9,020',cx,cy-7);ctx.font='500 8px Inter,sans-serif';ctx.fillStyle='rgba(240,217,181,0.4)';ctx.fillText('TONIGHT',cx,cy+8);ctx.restore();}};
+    new Chart(document.getElementById('sectionChart'),{type:'doughnut',plugins:[sp],data:{labels:['Main','Terrace','Private','Bar'],datasets:[{data:[4820,2140,1380,680],backgroundColor:['#c9903f','#3a5a8c','#4a8c65','#8c5a9c'],borderWidth:3,borderColor:'#1e1408',hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{display:false},tooltip:{...tip,callbacks:{label:function(c){return ' '+c.label+': $'+c.parsed.toLocaleString();}}}}}});
+  }
+
+  if(tab==='floor'){
+    var hm=document.getElementById('heatmap');
+    var slots=['5pm','6pm','7pm','8pm','9pm','10pm'];
+    var vals=[[2,3,4,6,5,2],[1,2,4,7,6,3],[0,1,3,5,4,2],[2,3,5,8,7,4],[4,6,8,10,9,6],[5,8,10,12,11,8],[3,5,7,9,8,5]];
+    slots.forEach(function(sl,si){
+      var row=document.createElement('div'); row.className='hm-row-wrap';
+      var lbl=document.createElement('div'); lbl.className='hm-lbl'; lbl.textContent=sl; row.appendChild(lbl);
+      vals.forEach(function(d){var cell=document.createElement('div'); cell.className='hm-cell'; var v=d[si]/12; cell.style.background='rgba(201,144,63,'+(0.06+v*0.7)+')'; row.appendChild(cell);});
+      hm.appendChild(row);
+    });
+  }
+
+  if(tab==='reservations'){
+    new Chart(document.getElementById('weekResChart'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Reservations',data:[14,18,16,22,28,32,20],backgroundColor:'rgba(201,144,63,0.75)',borderRadius:4,borderSkipped:false},{label:'Walk-ins',data:[3,4,5,6,8,10,5],backgroundColor:'rgba(240,217,181,0.1)',borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:tip},scales:bx}});
+  }
+
+  if(tab==='menu'){
+    var cp={id:'cp',afterDraw:function(c){var ctx=c.ctx,ca=c.chartArea,cx=(ca.left+ca.right)/2,cy=(ca.top+ca.bottom)/2;ctx.save();ctx.font='700 14px "Playfair Display",serif';ctx.fillStyle='#f0d9b5';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('247',cx,cy-6);ctx.font='9px Inter,sans-serif';ctx.fillStyle='rgba(240,217,181,0.4)';ctx.fillText('ORDERS',cx,cy+8);ctx.restore();}};
+    new Chart(document.getElementById('catChart'),{type:'doughnut',plugins:[cp],data:{labels:['Mains','Starters','Beverages','Desserts','Sides'],datasets:[{data:[115,65,64,14,52],backgroundColor:['#c9903f','#4a8c65','#3a5a8c','#a05a3a','#8c5a9c'],borderWidth:3,borderColor:'#1e1408',hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{display:false},tooltip:{...tip,callbacks:{label:function(c){return ' '+c.label+': '+c.parsed;}}}}}});
+  }
+
+  if(tab==='revenue'){
+    new Chart(document.getElementById('trendChart'),{type:'line',data:{labels:['Wk 1','Wk 2','Wk 3','Wk 4','Wk 5','Wk 6','Wk 7','Wk 8'],datasets:[{data:[18200,21400,19800,24600,22100,26800,25400,31200],borderColor:'#c9903f',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#c9903f',fill:true,backgroundColor:'rgba(201,144,63,0.07)',tension:.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...tip,callbacks:{label:function(c){return '$'+c.parsed.y.toLocaleString();}}}},scales:{...bx,y:{...bx.y,ticks:{...bx.y.ticks,callback:function(v){return '$'+(v/1000).toFixed(0)+'k';}}}}}});
+
+    new Chart(document.getElementById('coversWeekChart'),{type:'bar',data:{labels:['Wk 1','Wk 2','Wk 3','Wk 4','Wk 5','Wk 6','Wk 7','Wk 8'],datasets:[{data:[484,568,520,640,580,700,660,810],backgroundColor:function(c){return c.dataIndex===7?'rgba(201,144,63,0.85)':'rgba(201,144,63,0.35)';},borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:tip},scales:bx}});
+  }
+}
+
+initCharts('service');
+</script>
+</body>
+</html>
