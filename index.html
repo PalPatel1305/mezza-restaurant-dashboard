@@ -468,15 +468,15 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
     <table class="dtable">
       <thead><tr><th>Time</th><th>Guest</th><th>Section</th><th>Party</th><th>Note</th><th>Status</th><th>Action</th></tr></thead>
       <tbody>
-        <tr><td class="res-time">6:30 PM</td><td><strong>Bennett, H.</strong><div style="font-size:10px;color:var(--dim)">Birthday</div></td><td>Main</td><td>2</td><td style="font-size:10px;color:var(--dim)">Birthday</td><td><span class="tag tag-done">Done</span></td><td><button class="btn btn-gold" onclick="toast('Bennett cleared','ti-check')">Clear</button></td></tr>
-        <tr><td class="res-time">7:00 PM</td><td><strong>Adler, L.</strong><div style="font-size:10px;color:var(--dim)">Champagne on arrival</div></td><td>Main</td><td>4</td><td><span class="tag tag-vip">VIP</span></td><td><span class="tag tag-seated">Seated</span></td><td><button class="btn btn-green" onclick="toast('Adler managed','ti-check')">Manage</button></td></tr>
-        <tr><td class="res-time">7:15 PM</td><td><strong>Moreau, R.</strong><div style="font-size:10px;color:var(--dim)">Anniversary</div></td><td>Terrace</td><td>2</td><td style="font-size:10px;color:var(--dim)">Anniversary</td><td><span class="tag tag-seated">Seated</span></td><td><button class="btn btn-green" onclick="toast('Moreau managed','ti-check')">Manage</button></td></tr>
-        <tr><td class="res-time">7:30 PM</td><td><strong>Khan, P.</strong></td><td>Private A</td><td>8</td><td style="font-size:10px;color:var(--dim)">—</td><td><span class="tag tag-seated">Seated</span></td><td><button class="btn btn-green" onclick="toast('Khan managed','ti-check')">Manage</button></td></tr>
-        <tr><td class="res-time">8:00 PM</td><td><strong>Silva, V.</strong></td><td>Main</td><td>3</td><td style="font-size:10px;color:var(--dim)">—</td><td><span class="tag tag-up">Upcoming</span></td><td><button class="btn btn-gold" onclick="toast('Silva, V. seated at Table 7','ti-armchair')">Seat Now</button></td></tr>
-        <tr><td class="res-time">8:00 PM</td><td><strong>Chen, W.</strong><div style="font-size:10px;color:var(--dim)">Halal menu requested</div></td><td>Terrace</td><td>6</td><td><span class="tag" style="background:var(--amber-bg);color:var(--amber);border:0.5px solid rgba(196,124,16,0.3)">Halal</span></td><td><span class="tag tag-up">Upcoming</span></td><td><button class="btn btn-gold" onclick="toast('Chen, W. seated at Terrace T6','ti-armchair')">Seat Now</button></td></tr>
-        <tr><td class="res-time">8:30 PM</td><td><strong>Tanaka, C.</strong><div style="font-size:10px;color:var(--dim)">Walk-in</div></td><td>Terrace</td><td>5</td><td style="font-size:10px;color:var(--dim)">Walk-in</td><td><span class="tag tag-wait">Waiting</span></td><td><button class="btn btn-gold" onclick="toast('Tanaka party seated','ti-armchair')">Seat Now</button></td></tr>
-        <tr><td class="res-time">9:00 PM</td><td><strong>Dupont, F.</strong><div style="font-size:10px;color:var(--dim)">Wine pairing menu</div></td><td>Main</td><td>4</td><td><span class="tag tag-vip">Sommelier</span></td><td><span class="tag tag-up">Upcoming</span></td><td><button class="btn btn-gold" onclick="toast('Dupont confirmed','ti-check')">Confirm</button></td></tr>
-        <tr><td class="res-time">9:30 PM</td><td><strong>Mueller, K.</strong><div style="font-size:10px;color:var(--dim)">Corporate dinner</div></td><td>Private B</td><td>10</td><td><span class="tag tag-vip">VIP</span></td><td><span class="tag tag-up">Upcoming</span></td><td><button class="btn btn-gold" onclick="toast('Mueller confirmed','ti-check')">Confirm</button></td></tr>
+        <tr><td class="res-time">6:30 PM</td><td><strong>Bennett, H.</strong><div style="font-size:10px;color:var(--dim)">Birthday</div></td><td>Main</td><td>2</td><td style="font-size:10px;color:var(--dim)">Birthday</td><td><span class="tag tag-done">Done</span></td><td><button class="btn btn-gold" onclick="resAction(this,'clear')">Clear</button></td></tr>
+        <tr><td class="res-time">7:00 PM</td><td><strong>Adler, L.</strong><div style="font-size:10px;color:var(--dim)">Champagne on arrival</div></td><td>Main</td><td>4</td><td><span class="tag tag-vip">VIP</span></td><td><span class="tag tag-seated">Seated</span></td><td><button class="btn btn-green" onclick="resAction(this,'manage')">Manage</button></td></tr>
+        <tr><td class="res-time">7:15 PM</td><td><strong>Moreau, R.</strong><div style="font-size:10px;color:var(--dim)">Anniversary</div></td><td>Terrace</td><td>2</td><td style="font-size:10px;color:var(--dim)">Anniversary</td><td><span class="tag tag-seated">Seated</span></td><td><button class="btn btn-green" onclick="resAction(this,'manage')">Manage</button></td></tr>
+        <tr><td class="res-time">7:30 PM</td><td><strong>Khan, P.</strong></td><td>Private A</td><td>8</td><td style="font-size:10px;color:var(--dim)">—</td><td><span class="tag tag-seated">Seated</span></td><td><button class="btn btn-green" onclick="resAction(this,'manage')">Manage</button></td></tr>
+        <tr><td class="res-time">8:00 PM</td><td><strong>Silva, V.</strong></td><td>Main</td><td>3</td><td style="font-size:10px;color:var(--dim)">—</td><td><span class="tag tag-up">Upcoming</span></td><td><button class="btn btn-gold" onclick="resAction(this,'seat')">Seat Now</button></td></tr>
+        <tr><td class="res-time">8:00 PM</td><td><strong>Chen, W.</strong><div style="font-size:10px;color:var(--dim)">Halal menu requested</div></td><td>Terrace</td><td>6</td><td><span class="tag" style="background:var(--amber-bg);color:var(--amber);border:0.5px solid rgba(196,124,16,0.3)">Halal</span></td><td><span class="tag tag-up">Upcoming</span></td><td><button class="btn btn-gold" onclick="resAction(this,'seat')">Seat Now</button></td></tr>
+        <tr><td class="res-time">8:30 PM</td><td><strong>Tanaka, C.</strong><div style="font-size:10px;color:var(--dim)">Walk-in</div></td><td>Terrace</td><td>5</td><td style="font-size:10px;color:var(--dim)">Walk-in</td><td><span class="tag tag-wait">Waiting</span></td><td><button class="btn btn-gold" onclick="resAction(this,'seat')">Seat Now</button></td></tr>
+        <tr><td class="res-time">9:00 PM</td><td><strong>Dupont, F.</strong><div style="font-size:10px;color:var(--dim)">Wine pairing menu</div></td><td>Main</td><td>4</td><td><span class="tag tag-vip">Sommelier</span></td><td><span class="tag tag-up">Upcoming</span></td><td><button class="btn btn-gold" onclick="resAction(this,'confirm')">Confirm</button></td></tr>
+        <tr><td class="res-time">9:30 PM</td><td><strong>Mueller, K.</strong><div style="font-size:10px;color:var(--dim)">Corporate dinner</div></td><td>Private B</td><td>10</td><td><span class="tag tag-vip">VIP</span></td><td><span class="tag tag-up">Upcoming</span></td><td><button class="btn btn-gold" onclick="resAction(this,'confirm')">Confirm</button></td></tr>
       </tbody>
     </table>
     </div>
@@ -629,6 +629,61 @@ function switchTab(id,el){
   if(el) el.classList.add('active');
   else document.querySelector('[data-tab='+id+']').classList.add('active');
   if(!chartsInit[id]) initCharts(id);
+}
+
+// ── RESERVATION ACTIONS ────────────────────────────────
+function resAction(btn, action) {
+  var row = btn.closest('tr');
+  var statusCell = row.cells[5];
+  var actionCell = row.cells[6];
+  var name = row.querySelector('strong').textContent;
+
+  if (action === 'seat') {
+    statusCell.innerHTML = '<span class="tag tag-seated">Seated</span>';
+    actionCell.innerHTML = '<button class="btn btn-green" onclick="resAction(this,\'manage\')">Manage</button>';
+    toast(name + ' seated', 'ti-armchair');
+
+  } else if (action === 'confirm') {
+    statusCell.innerHTML = '<span class="tag" style="background:rgba(58,90,140,0.18);color:#6fa0c8;border:0.5px solid rgba(58,90,140,0.35)">Confirmed</span>';
+    actionCell.innerHTML = '<button class="btn btn-gold" onclick="resAction(this,\'seat\')">Seat Now</button>';
+    toast(name + ' confirmed', 'ti-check');
+
+  } else if (action === 'manage') {
+    var existing = row.nextElementSibling;
+    if (existing && existing.classList.contains('res-detail-row')) { existing.remove(); return; }
+    var detail = document.createElement('tr');
+    detail.className = 'res-detail-row';
+    detail.innerHTML = '<td colspan="7" style="padding:0 10px 12px 58px"><div style="display:flex;gap:8px;flex-wrap:wrap">' +
+      '<button class="btn btn-gold" onclick="resCheckOut(this)"><i class="ti ti-logout"></i>Check Out</button>' +
+      '<button class="btn btn-red" onclick="resNoShow(this)"><i class="ti ti-user-off"></i>No-show</button>' +
+      '<button class="btn" style="background:rgba(240,217,181,0.06);color:var(--dim);border:0.5px solid var(--border)" onclick="this.closest(\'.res-detail-row\').remove()"><i class="ti ti-x"></i>Close</button>' +
+      '</div></td>';
+    row.after(detail);
+
+  } else if (action === 'clear') {
+    row.style.transition = 'opacity .4s';
+    row.style.opacity = '0.28';
+    row.style.pointerEvents = 'none';
+    toast(name + ' cleared', 'ti-check');
+  }
+}
+
+function resCheckOut(btn) {
+  var detailRow = btn.closest('.res-detail-row');
+  var mainRow = detailRow.previousElementSibling;
+  mainRow.cells[5].innerHTML = '<span class="tag tag-done">Done</span>';
+  mainRow.cells[6].innerHTML = '<button class="btn btn-gold" onclick="resAction(this,\'clear\')">Clear</button>';
+  detailRow.remove();
+  toast(mainRow.querySelector('strong').textContent + ' checked out', 'ti-logout');
+}
+
+function resNoShow(btn) {
+  var detailRow = btn.closest('.res-detail-row');
+  var mainRow = detailRow.previousElementSibling;
+  mainRow.cells[5].innerHTML = '<span class="tag" style="background:var(--red-bg);color:var(--red);border:0.5px solid rgba(160,90,58,0.3)">No-show</span>';
+  mainRow.cells[6].innerHTML = '<button class="btn btn-gold" onclick="resAction(this,\'clear\')">Clear</button>';
+  detailRow.remove();
+  toast(mainRow.querySelector('strong').textContent + ' marked no-show', 'ti-user-off');
 }
 
 // ── TOAST ──────────────────────────────────────────────
