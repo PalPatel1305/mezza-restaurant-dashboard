@@ -12,7 +12,7 @@
   --bg:#100a02;--sidebar:#16100a;--card:#1e1408;--card2:#241a0c;
   --border:rgba(240,217,181,0.09);--border2:rgba(240,217,181,0.15);
   --gold:#c9903f;--gold-dim:rgba(201,144,63,0.18);--gold-text:#f0d9b5;
-  --text:#e8d0a8;--dim:rgba(240,217,181,0.38);--faint:rgba(240,217,181,0.2);
+  --text:#e8d0a8;--dim:rgba(240,217,181,0.65);--faint:rgba(240,217,181,0.48);
   --green:#4a8c65;--green-bg:rgba(74,140,101,0.15);
   --blue:#3a5a8c;--blue-bg:rgba(58,90,140,0.15);
   --red:#a05a3a;--red-bg:rgba(160,90,58,0.18);
@@ -44,7 +44,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .sb-date{font-size:9px;letter-spacing:1.5px;color:var(--faint);margin-top:4px;text-transform:uppercase}
 .sb-live-rev{margin-top:12px;padding:10px 12px;background:var(--gold-dim);border-radius:8px;border:0.5px solid rgba(201,144,63,0.2)}
 .sb-rev-label{font-size:9px;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase}
-.sb-rev-val{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--gold-text);margin-top:3px}
+.sb-rev-val{font-family:'Inter',sans-serif;font-size:22px;font-weight:700;color:var(--gold-text);margin-top:3px;font-variant-numeric:tabular-nums lining-nums}
 .sb-rev-sub{font-size:10px;color:var(--dim);margin-top:2px}
 
 /* ── MAIN AREA ───────────────────────────────────────── */
@@ -64,7 +64,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .hero-row{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border2);border-radius:12px;overflow:hidden;border:0.5px solid var(--border2)}
 .hero-stat{background:var(--card);padding:20px 18px;display:flex;flex-direction:column;gap:6px}
 .hs-label{font-size:9px;letter-spacing:1.5px;color:var(--faint);text-transform:uppercase}
-.hs-val{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--gold-text);line-height:1}
+.hs-val{font-family:'Inter',sans-serif;font-size:32px;font-weight:700;color:var(--gold-text);line-height:1;font-variant-numeric:tabular-nums lining-nums}
 .hs-sub{font-size:10px;color:var(--dim)}
 .hs-sub .up{color:var(--green);font-weight:600}
 .hs-sub .dn{color:var(--red);font-weight:600}
@@ -125,7 +125,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .res-item{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.5px solid rgba(240,217,181,0.05)}
 .res-item:last-child{border-bottom:none}
 .res-time-block{width:48px;flex-shrink:0;text-align:center}
-.res-hour{font-family:'Playfair Display',serif;font-size:15px;color:var(--gold-text);line-height:1}
+.res-hour{font-family:'Inter',sans-serif;font-size:15px;font-weight:600;color:var(--gold-text);line-height:1;font-variant-numeric:tabular-nums lining-nums}
 .res-min{font-size:9px;color:var(--faint)}
 .res-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff;flex-shrink:0;font-family:'Playfair Display',serif}
 .res-info{flex:1}
@@ -148,7 +148,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .dish-bar-bg{height:3px;background:rgba(240,217,181,0.06);border-radius:2px;overflow:hidden;margin-top:5px}
 .dish-bar{height:100%;border-radius:2px}
 .dish-orders{font-size:11px;color:var(--dim);width:46px;text-align:right;flex-shrink:0}
-.dish-revenue{font-family:'Playfair Display',serif;font-size:13px;color:var(--gold-text);width:54px;text-align:right;flex-shrink:0}
+.dish-revenue{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--gold-text);width:54px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums lining-nums}
 
 /* ── KITCHEN BARS ────────────────────────────────────── */
 .kw-item{display:flex;align-items:center;gap:10px;margin-bottom:12px}
@@ -156,7 +156,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .kw-name{font-size:11px;color:var(--gold-text);font-weight:500;width:100px;flex-shrink:0}
 .kw-track{flex:1;height:6px;background:rgba(240,217,181,0.07);border-radius:3px;overflow:hidden}
 .kw-fill{height:100%;border-radius:3px}
-.kw-min{font-family:'Playfair Display',serif;font-size:14px;font-weight:600;width:44px;text-align:right;flex-shrink:0}
+.kw-min{font-family:'Inter',sans-serif;font-size:14px;font-weight:700;width:44px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums lining-nums}
 .kw-badge{font-size:8px;font-weight:700;width:34px;text-align:right;flex-shrink:0}
 
 /* ── DATA TABLE ──────────────────────────────────────── */
@@ -171,7 +171,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
 .stat-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .stat-cell{background:var(--card2);border-radius:9px;padding:14px;border:0.5px solid var(--border)}
 .stat-lbl{font-size:9px;letter-spacing:1.5px;color:var(--faint);text-transform:uppercase;margin-bottom:5px}
-.stat-val{font-family:'Playfair Display',serif;font-size:24px;font-weight:600;color:var(--gold-text);line-height:1}
+.stat-val{font-family:'Inter',sans-serif;font-size:24px;font-weight:700;color:var(--gold-text);line-height:1;font-variant-numeric:tabular-nums lining-nums}
 .stat-sub{font-size:10px;color:var(--dim);margin-top:4px}
 
 /* ── BADGE ───────────────────────────────────────────── */
